@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block content %}
+<h4>Loan Application</h4>
+
+<form method="post" enctype="multipart/form-data" class="card p-3 mb-4">
+    <input name="amount" type="number" class="form-control mb-2"
+           placeholder="Loan Amount" required>
+
+    <input name="address" type="text" class="form-control mb-2"
+           placeholder="Your Address" required>
+
+    <input type="file" name="selfie"
+           class="form-control mb-2"
+           accept=".jpg,.jpeg,.png" required>
+          
+
+    <input name="g1_name" type="text" class="form-control mb-2"
+           placeholder="Guarantor 1 Name" required>
+    <input name="g1_phone" type="text" class="form-control mb-2"
+           placeholder="Guarantor 1 Phone" required>
+
+    <input name="g2_name" type="text" class="form-control mb-2"
+           placeholder="Guarantor 2 Name" required>
+    <input name="g2_phone" type="text" class="form-control mb-2"
+           placeholder="Guarantor 2 Phone" required>
+
+    <input name="acct_number" type="text" class="form-control mb-2"
+           placeholder="your account number and name of the bank" required>
+
+
+    <input name="duration_months" type="number" class="form-control mb-2"
+           placeholder="Loan Duration (months)" required min="1">
+
+    <button class="btn btn-primary">Apply for Loan</button>
+</form>
+
+<h5>Your Loan Requests</h5>
+<table class="table table-bordered">
+    <tr>
+        <th>Amount</th>
+        <th>Balance</th>
+        <th>Account Number</th>
+        <th>Duration (months)</th>
+        <th>Status</th>
+        <th>Due Date</th>
+    </tr>
+    {% for loan in loans %}
+    <tr>
+        <td>₦{{ loan.amount }}</td>
+        <td>₦{{ loan.balance }}</td>
+        <td>{{loan.account_number}}</td>
+        <td>{{ loan.duration_months }}</td>
+        <td>{{ loan.status }}</td>
+        <td>{{ loan.due_date.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{%for loan in loans%}
+       {% if loan.status == 'approved' %}
+       <h5>LOAN REPAYMENT</h5>
+       {% if loan.status == 'approved' and loan.due_date < now %}
+    <span class="badge bg-danger">Overdue</span>
+{% endif %}
+
+       <form method="post" enctype="multipart/form-data"
+       action="{{ url_for('submit_repayment', loan_id=loan.id) }}"
+       class="mt-2">
+
+       <input type="number" name="amount_paid"
+              class="form-control mb-2"
+              placeholder="Amount Paid" required>
+
+       <input type="file" name="evidence"
+              class="form-control mb-2"
+              accept=".jpg,.jpeg,.png,.pdf" required>
+
+       <button class="btn btn-warning btn-sm">
+              Submit Repayment
+       </button>
+       </form>
+       {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div style="color: rgb(9, 9, 143);" class="alert alert-{{ category }}"> {{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+       {% endif %}
+{% endfor %}
+{% endblock %}

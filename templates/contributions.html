@@ -1,0 +1,53 @@
+{%extends 'base.html' %}
+
+{%block content%}
+<h4>Contribution Requests</h4>
+
+{%if not is_member%}
+<p>{{current_user.full_name}}, you are not a member yet. <br> you must be a member before making any contributions</p>
+{%else%}
+<form method="post" enctype="multipart/form-data" class="card p-3 mb-4">
+    <input name="amount" type="number" class="form-control mb-2"
+           placeholder="Amount transferred" required>
+
+    <input type="file" name="evidence"
+           class="form-control mb-2"
+           accept=".jpg,.jpeg,.png,.pdf" required>
+
+    <button class="btn btn-primary">Submit for Approval</button>
+</form>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}"> {{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<table class="table table-bordered">
+    <tr>
+        <th>Amount</th>
+        <th>Evidence</th>
+        <th>Status</th>
+    </tr>
+    {% for c in contributions %}
+    <tr>
+        <td>₦{{ c.amount }}</td>
+        <td>{{ c.evidence }}</td>
+        <td>
+        {%if c.status=='rejected'%}
+        <span class="badge bg-danger">{{ c.status }}</span>
+        {%elif c.status=='approved'%}
+        <span class="badge bg-success">{{ c.status }}</span>
+            {%else%}
+        <label style="background-color: yellow; 
+        padding: 3px 3px; border-radius: 10px;
+        ">{{ c.status }}</label>
+        {%endif%}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{%endif%}
+{%endblock%}
+

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h3>Welcome, {{ current_user.full_name }}</h3>
+
+    <hr>
+
+    <!-- MEMBERSHIP SECTION -->
+    {% if not member %}
+        <a href="{{ url_for('apply_membership') }}" class="btn btn-success">
+            Apply for Membership
+        </a>
+        <p>upgrade to become a member and enjoy our 5% loans and lots more!</p>
+
+    {% elif member.status == 'pending' %}
+        <p>Your membership application is pending approval.</p>
+
+    {% elif member.status == 'approved' %}
+        <h3>Total contributions: ₦{{total_contribution}}</h3>
+        <h4>Expected profit: pending</h4>
+        <a href="{{ url_for('contributions') }}" class="btn btn-primary">
+            Make Contribution
+        </a>
+   
+    {% elif member.status == 'rejected' %}
+    <a href="{{ url_for('apply_membership') }}" class="btn btn-success">
+        Reapply again
+    </a>
+    {% endif %}
+    <hr>
+
+    <!-- LOAN SECTION -->
+    <a href="{{ url_for('loans') }}" class="btn btn-warning">
+        Apply for Loan
+    </a>
+
+    <p class="mt-2">
+        Interest Rate:
+        {% if member.status == 'approved' %}
+            5%
+        {% else %}
+            10%
+        {% endif %}
+    </p>
+
+</div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}"> {{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+{% endblock %}

@@ -1,0 +1,32 @@
+<h3>Contribution Approval</h3>
+
+<table class="table table-striped">
+<tr>
+    <th>Member</th>
+    <th>Amount</th>
+    <th>Evidence</th>
+    <th>Status</th>
+    <th>Action</th>
+</tr>
+
+{% for c in contributions %}
+<tr>
+    <td>{{ c.member.full_name }}</td>
+    <td>₦{{ c.amount }}</td>
+    <td>{{ c.evidence }}</td>
+    <td>
+        {%if c.status=='rejected'%}
+        <span class="badge bg-danger">{{ c.status }}</span>
+        {%elif c.status=='approved'%}
+        <span class="badge bg-success">{{ c.status }}</span>
+        {%endif%}
+    </td>
+    <td>
+        {% if c.status == 'pending' %}
+        <a href="{{ url_for('approve_contribution', id=c.id) }}"
+           class="btn btn-sm btn-success">Approve</a>
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}
+</table>

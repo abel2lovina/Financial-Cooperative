@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-4">
+
+    <h4>Pending Repayments</h4>
+
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Member</th>
+                <th>Loan ID</th>
+                <th>Amount</th>
+                <th>Evidence</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        {% for r in repayments %}
+            <tr>
+                <td>{{ r.member.full_name }}</td>
+                <td>{{ r.loan_id }}</td>
+                <td>₦{{ r.amount_paid }}</td>
+                <td>
+                    <a href="{{ url_for('static', filename='uploads/evidence/' + r.evidence) }}" target="_blank">
+                        View
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ url_for('confirm_repayment', repayment_id=r.id) }}" 
+                       class="btn btn-success btn-sm">Approve</a>
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}

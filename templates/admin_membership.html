@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-4">
+    <h2>Pending Membership Applications</h2>
+
+    {% if applications %}
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Date Applied</th>
+                <th>Evidence</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for app in applications %}
+            <tr>
+                <td>{{ app.full_name }}</td>
+                <td>{{ app.email }}</td>
+                <td>{{ app.date_applied }}</td>
+                <td>
+                    <a href="{{ url_for('static', filename='uploads/membership/' + app.payment_evidence) }}" target="_blank">
+                        View Evidence
+                    </a>
+                </td>
+                
+                <td>
+                    {%if app.status=='pending'%}
+                    <a href="{{ url_for('approve_membership', application_id=app.id) }}" 
+                       class="btn btn-success btn-sm">
+                        Approve
+                    </a>
+
+                    <a href="{{ url_for('reject_membership', application_id=app.id) }}" 
+                       class="btn btn-danger btn-sm">
+                        Reject
+                    </a>
+                    {%elif app.status=='approved'%}
+                    <p>Approved</p>
+                    {%elif app.status=='rejected'%}
+                    <p>Rejected</p>
+                    {%endif%}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}"> {{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+    {% else %}
+        <div class="alert alert-info">
+            No pending membership applications.
+        </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}

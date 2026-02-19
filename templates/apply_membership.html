@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-4">
+    <h3>Membership Application Form</h3>
+
+    <form method="POST" enctype="multipart/form-data">
+
+        <div class="mb-3">
+            <label>Full Name</label>
+            <input type="text" name="full_name" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Phone Number</label>
+            <input type="text" name="phone_number" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Residential Address</label>
+            <textarea name="residential_address" class="form-control" required></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label>PSN Number</label>
+            <input type="text" name="psn_number" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label>Email</label>
+            <input type="email" name="email" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Grade Level</label>
+            <input type="text" name="grade_level" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label>Next of Kin</label>
+            <input type="text" name="next_of_kin" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Next of Kin Phone Number</label>
+            <input type="text" name="next_of_kin_phone" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Amount to Save Per Month</label>
+            <input type="number" name="monthly_saving" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Upload Evidence of ₦500 Payment</label>
+            <input type="file" name="payment_evidence" class="form-control" 
+            accept=".jpg,.jpeg,.png,.pdf" required>
+            
+            
+        </div>
+
+        <div class="mb-3">
+            <label>Upload Passport Photograph</label>
+            <input type="file" name="passport" class="form-control" 
+            accept=".jpg,.jpeg,.png,.pdf" required>
+            
+        </div>
+
+        <button class="btn btn-success">Submit Application</button>
+    </form>
+    
+</div>
+
+{% endblock %}

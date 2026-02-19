@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h3 class="mb-3">Member Feedback</h3>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        {% for fb in feedbacks %}
+        <div class="border-bottom mb-3 pb-2">
+            <strong>{{ fb.user.full_name }}</strong>
+            <span class="text-muted float-end">
+                {{ fb.date_submitted.strftime('%d %b %Y') }}
+            </span>
+
+            <p class="mt-2">{{ fb.message }}</p>
+
+            {% if fb.rating %}
+                <p>Rating: ⭐ {{ fb.rating }}/5</p>
+            {% endif %}
+        </div>
+        {% else %}
+        <p>No feedback submitted yet.</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

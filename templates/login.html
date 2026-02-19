@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3 style="color: rgb(68, 0, 255);">Login</h3>
+<form method="post">
+    <input class="form-control mb-2" name="email" placeholder="Email" required>
+    <input class="form-control mb-2" name="password" type="password" placeholder="Password" required>
+    <button class="btn btn-success">Login</button>
+</form>
+<style>
+    body {
+        margin: 0;
+        padding-top: 0;
+        background: url("{{ url_for('static', filename='images/icon.png') }}") no-repeat center center fixed;
+        background-size: cover;
+        position: relative;
+    }
+</style>
+
+<a href="{{ url_for('forgot_password') }}">
+    Forgot Password?
+</a>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}"> {{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+{% endblock %}

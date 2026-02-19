@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="card shadow col-md-6 mx-auto">
+        <div class="card-header bg-primary text-white">
+            Send Us Your Feedback
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST">
+
+                <div class="mb-3">
+                    <label class="form-label">Rate Your Experience</label>
+                    <select name="rating" class="form-select" required>
+                        <option value="">Select Rating</option>
+                        <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                        <option value="4">⭐⭐⭐⭐ Very Good</option>
+                        <option value="3">⭐⭐⭐ Good</option>
+                        <option value="2">⭐⭐ Fair</option>
+                        <option value="1">⭐ Poor</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Your Message</label>
+                    <textarea name="message" class="form-control" rows="4" 
+                              placeholder="Tell us what we can improve..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-success w-100">
+                    Submit Feedback
+                </button>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

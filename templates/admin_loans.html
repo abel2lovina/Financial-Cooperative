@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<h4>All Loan Applications</h4>
+
+<table class="table table-bordered">
+    <tr>
+        <th>User</th>
+        <th>Amount</th>
+        <th>Repayment</th>
+        <th>Balance</th>
+        <th>Status</th>
+    </tr>
+    {% for loan in loans %}
+    <tr>
+        <td>{{ loan.member.full_name }}</td>
+        <td>₦{{ loan.amount }}</td>
+        <td>₦{{ loan.repayment_amount }}</td>
+        <td>₦{{ loan.balance }}</td>
+        <td>{{ loan.status }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="{{url_for('admin_repayments')}} " class="btn btn-warning">Confirm Repayment</a>
+
+<h5>Repaid Loans</h5>
+<table class="table table-bordered">
+    <tr>
+        <th>User</th>
+        <th>Amount Paid</th>
+        <th>Balance</th>
+        <th>Date</th>
+    </tr>
+    {% for repay in repayments %}
+    <tr>
+        
+        <td>{{ repay.member.full_name }}</td>
+        
+        <td>₦{{ repay.amount_paid }}</td>
+        
+        <td>₦{{ repay.members.balance}}</td>
+        <td>{{ repay.date_submitted }}</td>
+        
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

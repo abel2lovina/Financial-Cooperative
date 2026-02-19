@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h3>Repay Loan</h3>
+    <p>Loan Amount: ₦{{ loan.amount }}</p>
+    <p>Remaining Balance: ₦{{ loan.balance }}</p>
+    <p>Status: {{ loan.status }}</p>
+
+    {% if loan.repayment_status != 'submitted' %}
+    <form method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label>Amount to Pay</label>
+            <input type="number" name="amount_paid" max="{{ loan.balance }}" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label>Upload Evidence</label>
+            <input type="file" name="evidence" class="form-control" required>
+        </div>
+        <button class="btn btn-primary">Submit Repayment</button>
+    </form>
+    {% else %}
+        <p>Repayment already submitted. Awaiting admin confirmation.</p>
+    {% endif %}
+
+    <p class="mt-2"><a href="{{ url_for('member_dashboard') }}">Back to Dashboard</a></p>
+</div>
+
+{% endblock %}

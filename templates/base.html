@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cooperative App</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/icon.png') }}">
+</head>
+<body class="bg-light">
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="#">
+            GSSS NASSARAWA COOPERATIVE
+            <img style="border-radius: 50%; height: 30px; width: 30px;" src="{{ url_for('static', filename='images/icon.png') }}" class="icon-img">
+            
+        </a>
+
+        <button class="navbar-toggler" type="button" 
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+
+            <ul class="navbar-nav me-auto">
+                {% if current_user.is_authenticated %}
+                
+                {% if current_user.role == 'member' %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('member_dashboard') }}">Dashboard</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('loans') }}">Loans</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('feedback') }}">
+                    <i class="bi bi-chat-dots-fill"></i> Feedback
+                </a>
+                </li>
+                {% endif %}
+
+                {% if current_user.role == 'admin' %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('admin_loans') }}" >
+                        Loans
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('admin_feedback') }}">
+                        <i class="bi bi-chat-dots-fill"></i> Feedback
+                    </a>
+                </li>
+
+                {% endif %}
+
+                {% endif %}
+            </ul>
+
+            <ul class="navbar-nav">
+                {% if not current_user.is_authenticated %}
+                <a href="{{ url_for('register') }}" class="btn btn-success btn-lg">Register</a>
+                {%endif%}
+                {% if current_user.is_authenticated %}
+
+                    <span class="nav-link text-warning"></span>
+                      <a class="nav-link" href="{{ url_for('change_password') }}">change password</a> 
+                      
+         
+                    </span>
+               
+
+                <li class="nav-item">
+                    <span class="nav-link text-warning">
+                        {{ current_user.full_name }}
+                    </span>
+                </li>
+                <li class="nav-item">
+                {% if current_user.is_authenticated %}
+
+                {% set application = current_user.membership_applications[-1] if current_user.membership_applications else None %}
+
+                {% if application and application.status == 'approved' and application.passport %}
+                
+                    <a class="nav-link" href="{{ url_for('home') }}">
+                        <img style="border-radius: 50%; height: 30px; width: 30px;"
+                            src="{{ url_for('static', filename='uploads/membership/' + application.passport) }}">
+                    </a>
+                    
+                {% else %}
+                
+                    <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+                    
+                {% endif %}
+
+{% endif %}
+
+
+                </li>
+
+                <li class="nav-item" style="margin-top: 8px;">
+                    <a class="btn btn-danger btn-sm" href="{{ url_for('logout') }}">
+                        Logout
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="container mt-4">
+    {% block content %}{% endblock %}
+</div>
+<footer class="text-center mt-5 mb-3 text-muted">
+    <small>
+        © 2026 GSSS Nassarawa Cooperative |
+        Developed by <strong>Abel2micro@gmail.com</strong> |
+                <a href="https://wa.me/09025593922" target="_blank" style="color: green;">
+            <i class="fa-brands fa-whatsapp"></i>
+        </a>
+    </small>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

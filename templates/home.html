@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    body {
+        margin: 0;
+        padding-top: 0;
+        background: url("{{ url_for('static', filename='images/photo.jpeg') }}") no-repeat center center fixed;
+        background-size: cover;
+        position: relative;
+    }
+
+    
+</style>
+
+<div class="container text-center mt-5">
+    <h1 style="color: white;">Cooperative Manager</h1>
+    <p style="color: rgb(9, 255, 0); font-weight: bolder">Register, apply for membership, request loans and manage contributions.</p>
+
+    {% if not current_user.is_authenticated %}
+        <a href="{{ url_for('register') }}" class="btn btn-success btn-lg">Register</a>
+        <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">Login</a>
+    {% else %}
+        <a href="{{ url_for('member_dashboard') }}" class="btn btn-dark btn-lg">
+            Go to Dashboard
+        </a>
+    {% endif %}
+</div>
+{% endblock %}
