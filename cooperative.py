@@ -1,7 +1,8 @@
-from flask import Flask, render_template, redirect, url_for, request, flash
+from flask import Flask, render_template, redirect, url_for, request, flash, session
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from datetime import datetime, timedelta
 import os
+import uuid
 from werkzeug.utils import secure_filename
 from itsdangerous import URLSafeTimedSerializer
 from flask import current_app
@@ -27,14 +28,6 @@ def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if current_user.role != 'admin':
-            abort(403)
-        return f(*args, **kwargs)
-    return decorated_function
-
-def membership_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if MembershipApplication.status != 'approved':
             abort(403)
         return f(*args, **kwargs)
     return decorated_function
@@ -66,6 +59,8 @@ app.config['MAIL_PASSWORD'] = 'fuetixmcaqorygkg'
 
 mail = Mail(app)
 
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)
+
 db.init_app(app)
 
 login_manager = LoginManager()
@@ -75,6 +70,10 @@ login_manager.init_app(app)
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+@app.before_request
+def make_session_permanent():
+    session.permanent = True
 
 @app.route('/')
 def home():
@@ -204,7 +203,7 @@ def contributions():
 
         filename = None
         if file and file.filename != '':
-            filename = secure_filename(file.filename)
+            filename = str(uuid.uuid4()) + "_" + secure_filename(file.filename)
             file.save(os.path.join(app.config['EVIDENCE_FOLDER'], filename))
 
         contribution = Contribution(
@@ -350,7 +349,6 @@ def loan_action(loan_id, action):
 @login_required
 def submit_repayment(loan_id):
     loan = Loan.query.get_or_404(loan_id)
-    loan = Loan.query.get_or_404(loan_id)
 
     if loan.user_id != current_user.id:
         abort(403)
@@ -358,7 +356,7 @@ def submit_repayment(loan_id):
     amount = float(request.form['amount_paid'])
     file = request.files['evidence']
 
-    filename = secure_filename(file.filename)
+    filename = str(uuid.uuid4()) + "_" + secure_filename(file.filename)
     file.save(os.path.join(app.config['EVIDENCE_FOLDER'], filename))
 
     repayment = LoanRepayment(
@@ -434,11 +432,11 @@ def apply_membership():
         passport_filename = None
 
         if payment_file:
-            payment_filename = secure_filename(payment_file.filename)
+            payment_filename = str(uuid.uuid4()) + "_" + secure_filename(payment_file.filename)
             payment_file.save(os.path.join(app.config['EVIDENCE_FOLDER'], payment_filename))
 
         if passport_file:
-            passport_filename = secure_filename(passport_file.filename)
+            passport_filename = str(uuid.uuid4()) + "_" + secure_filename(passport_file.filename)
             passport_file.save(os.path.join(app.config['MEMBERSHIP_FOLDER'], passport_filename))
 
         application = MembershipApplication(
@@ -541,7 +539,6 @@ def change_password():
 def generate_reset_token(self):
     serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
     return serializer.dumps(self.email, salt='password-reset-salt')
-
 
 @staticmethod
 def verify_reset_token(token, expiration=3600):
