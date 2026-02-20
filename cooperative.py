@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, flash, session
+from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from datetime import datetime, timedelta
 import os
@@ -66,8 +66,6 @@ app.config['MAIL_PASSWORD'] = 'fuetixmcaqorygkg'
 
 mail = Mail(app)
 
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)
-
 db.init_app(app)
 
 login_manager = LoginManager()
@@ -77,10 +75,6 @@ login_manager.init_app(app)
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-
-@app.before_request
-def make_session_permanent():
-    session.permanent = True
 
 @app.route('/')
 def home():
