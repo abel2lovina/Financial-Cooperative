@@ -20,5 +20,5 @@ with app.app_context():
         db.session.commit()
         print("Admin created successfully!")
 
-app.run(debug=False)
+
 
