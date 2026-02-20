@@ -78,6 +78,10 @@ login_manager.init_app(app)
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+@app.before_request
+def make_session_permanent():
+    session.permanent = True
+
 @app.route('/')
 def home():
     if current_user.is_authenticated:
@@ -102,7 +106,7 @@ def login():
         user = User.query.filter_by(email=request.form['email']).first()
         if user and user.check_password(request.form['password']):
             login_user(user)
-            session.permanent = True
+            
             # Redirect based on role
             if user.role == 'admin':
                 return redirect(url_for('admin_dashboard'))

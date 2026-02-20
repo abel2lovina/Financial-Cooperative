@@ -13,8 +13,8 @@
 </style>
 
 <div class="container text-center mt-5">
-    <h1 style="color: white;">Cooperative Manager</h1>
-    <p style="color: rgb(9, 255, 0); font-weight: bolder">Register, apply for membership, request loans and manage contributions.</p>
+    <h1 style="color: rgb(143, 141, 11);">Cooperative Manager</h1>
+    <p style="color: rgba(119, 50, 10, 0.959); font-weight: bolder">Register, apply for membership, request loans and manage contributions.</p>
 
     {% if not current_user.is_authenticated %}
         <a href="{{ url_for('register') }}" class="btn btn-success btn-lg">Register</a>
