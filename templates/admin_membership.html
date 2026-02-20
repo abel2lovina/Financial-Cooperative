@@ -27,6 +27,11 @@
                         View Evidence
                     </a>
                 </td>
+                                <td>
+                    <a href="{{ url_for('static', filename='uploads/membership/' + app.passport) }}" target="_blank">
+                        View Passport
+                    </a>
+                </td>
                 
                 <td>
                     {%if app.status=='pending'%}
