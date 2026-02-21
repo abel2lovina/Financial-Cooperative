@@ -93,19 +93,28 @@
   <thead>
     <tr>
       <th>Member</th>
+      <th>Address</th>
       <th>Amount</th>
-      <th>Balance</th>
-      <th>Status</th>
-      <th>Action</th>
+      <th>Guarantor 1</th>
+      <th>Guarantor 1</th>
+      <th>Selfie/Picture</th>
+      <th>Account Number</th>
     </tr>
   </thead>
   <tbody>
     {% for loan in loans %}
     <tr>
       <td>{{ loan.member.full_name }}</td>
+      <td>{{ loan.address }}</td>
       <td>₦{{ loan.amount }}</td>
-      <td>₦{{ loan.balance }}</td>
-      <td>{{ loan.status }}</td>
+      <td>{{ loan.guarantor1_name}}({{loan.guarantor1_phone}})</td>
+      <td>{{ loan.guarantor2_name}}({{loan.guarantor2_phone}})</td>
+      <td>
+      <a href="{{ url_for('static', filename='uploads/selfies/' + loan.selfie) }}" target="_blank">
+          View Selfie
+      </a>
+      </td>
+      <td>{{ loan.account_number}}</td>
       <td>
         {% if loan.status == 'pending' %}
           <a href="{{ url_for('loan_action', loan_id=loan.id, action='approve') }}" class="btn btn-success btn-sm">Approve</a>
