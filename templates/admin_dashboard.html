@@ -17,7 +17,8 @@
 <a href="{{ url_for('admin_membership') }}" class="btn btn-warning">
     View Membership Applications
 </a>
-
+<h3>Total Users: {{ total_users }}</h3>
+<h3>Total Approved Members: {{ total_members }}</h3>
 <!-- Contribution Summary -->
 <h3>All Contributions</h3>
 <table class="table table-bordered table-striped">
@@ -107,8 +108,13 @@
       <td>{{ loan.member.full_name }}</td>
       <td>{{ loan.address }}</td>
       <td>₦{{ loan.amount }}</td>
-      <td>{{ loan.guarantor1_name}}({{loan.guarantor1_phone}})</td>
-      <td>{{ loan.guarantor2_name}}({{loan.guarantor2_phone}})</td>
+      <td>{{ loan.guarantor1_name}}  
+          <a href="https://wa.me/{{loan.guarantor1_phone}}" target="_blank" style="color: green;">
+              <i class="fa-brands fa-whatsapp"></i>
+          </a> </td>
+      <td>{{ loan.guarantor2_name}}  <a href="https://wa.me/{{loan.guarantor2_phone}}" target="_blank" style="color: green;">
+              <i class="fa-brands fa-whatsapp"></i>
+          </a> </td></td>
       <td>
       <a href="{{ url_for('static', filename='uploads/selfies/' + loan.selfie) }}" target="_blank">
           View Selfie

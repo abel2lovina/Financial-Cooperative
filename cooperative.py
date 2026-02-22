@@ -55,7 +55,8 @@ app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'abel2micro@gmail.com'
-app.config['MAIL_PASSWORD'] = 'fuetixmcaqorygkg'
+#app.config['MAIL_PASSWORD'] = 'fuetixmcaqorygkg'
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
 
 mail = Mail(app)
 
@@ -138,6 +139,9 @@ def admin_dashboard():
     if current_user.role != 'admin':
         abort(403)
 
+    total_users = User.query.count()
+
+    total_members = MembershipApplication.query.filter_by(status='approved').count()
     # Fetch all contributions (latest first)
     contributions = Contribution.query.order_by(Contribution.date_submitted.desc()).all()
 
@@ -151,7 +155,9 @@ def admin_dashboard():
         'admin_dashboard.html',
         contributions=contributions,
         pending_contributions=pending_contributions,
-        loans=loans
+        loans=loans,
+        total_members=total_members,
+        total_users=total_users
     )
 
 @app.route('/admin/repayments')
