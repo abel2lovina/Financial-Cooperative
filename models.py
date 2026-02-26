@@ -24,7 +24,7 @@ class User(UserMixin, db.Model):
         lazy=True
     )
     is_member = db.Column(db.Boolean, default=False)
-    membership_evidence = db.Column(db.String(200))
+    membership_evidence = db.Column(db.String(500))
     membership_date_applied = db.Column(db.DateTime)
     membership_date_approved = db.Column(db.DateTime)
 
@@ -56,7 +56,7 @@ class User(UserMixin, db.Model):
 class Contribution(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     amount = db.Column(db.Float, nullable=False)
-    evidence = db.Column(db.String(200))  # filename or text
+    evidence = db.Column(db.String(500))  # filename or text
     status = db.Column(db.String(20), default='pending')  
     # pending | approved | rejected
 
@@ -74,7 +74,7 @@ class Loan(db.Model):
     status = db.Column(db.String(20), default='pending')  # pending, approved, rejected, paid
     account_number = db.Column(db.String(50))
     address = db.Column(db.String(200))
-    selfie = db.Column(db.String(200))
+    selfie = db.Column(db.String(500))
     guarantor1_name = db.Column(db.String(100))
     guarantor1_phone = db.Column(db.String(20))
     guarantor2_name = db.Column(db.String(100))
@@ -96,7 +96,7 @@ class LoanRepayment(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     amount_paid = db.Column(db.Float, nullable=False)
-    evidence = db.Column(db.String(200))
+    evidence = db.Column(db.String(500))
     status = db.Column(db.String(20), default='pending')  # pending, confirmed
 
     date_submitted = db.Column(db.DateTime, default=datetime.utcnow)
@@ -118,7 +118,7 @@ class MembershipApplication(db.Model):
     monthly_saving = db.Column(db.Float)
   
     payment_evidence = db.Column(db.String(200))
-    passport = db.Column(db.String(200))
+    passport = db.Column(db.String(500))
 
     status = db.Column(db.String(20), default='pending')  # pending / approved / rejected
 

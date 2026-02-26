@@ -2,6 +2,8 @@ from flask import Flask, render_template, redirect, url_for, request, flash, ses
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from datetime import datetime, timedelta
 import os
+import cloudinary
+import cloudinary.uploader
 import uuid
 from werkzeug.utils import secure_filename
 from itsdangerous import URLSafeTimedSerializer
@@ -19,7 +21,12 @@ from functools import wraps
 
 from config import Config
 from models import db, User, LoanRepayment, Loan, Contribution, MembershipApplication, Feedback
-
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+    secure=True
+)
 
 
 
@@ -209,9 +216,9 @@ def contributions():
 
         filename = None
         if file and file.filename != '':
-            filename = str(uuid.uuid4()) + "_" + secure_filename(file.filename)
-            file.save(os.path.join(app.config['EVIDENCE_FOLDER'], filename))
-
+            upload_result = cloudinary.uploader.upload(file, folder="cooperative/contributions")
+            filename = upload_result["secure_url"]
+                
         contribution = Contribution(
             user_id=current_user.id,
             amount=amount,
@@ -283,9 +290,8 @@ def loans():
         g2_phone = request.form['g2_phone']
 
         selfie_file = request.files['selfie']
-        filename = secure_filename(selfie_file.filename)
-        selfie_path = os.path.join(app.config['SELFIE_FOLDER'], filename)
-        selfie_file.save(selfie_path)
+        selfie_upload = cloudinary.uploader.upload(selfie_file, folder="cooperative/selfies")
+        selfie_path = selfie_upload["secure_url"]
 
         # calculate initial repayment including 5% interest
         if current_user.is_member == True:
@@ -362,8 +368,8 @@ def submit_repayment(loan_id):
     amount = float(request.form['amount_paid'])
     file = request.files['evidence']
 
-    filename = str(uuid.uuid4()) + "_" + secure_filename(file.filename)
-    file.save(os.path.join(app.config['EVIDENCE_FOLDER'], filename))
+    upload_result = cloudinary.uploader.upload(file, folder="cooperative/loan_repayments")
+    filename = upload_result["secure_url"]
 
     repayment = LoanRepayment(
         loan_id=loan.id,
@@ -437,15 +443,15 @@ def apply_membership():
         payment_filename = None
         passport_filename = None
 
-        if payment_file:
-            payment_filename = str(uuid.uuid4()) + "_" + secure_filename(payment_file.filename)
-            payment_file.save(os.path.join(app.config['EVIDENCE_FOLDER'], payment_filename))
+        if payment_file and payment_file.filename != '':
+            payment_upload = cloudinary.uploader.upload(payment_file, folder="cooperative/payment_evidence")
+            payment_filename = payment_upload["secure_url"]
 
-        if passport_file:
-            passport_filename = str(uuid.uuid4()) + "_" + secure_filename(passport_file.filename)
-            passport_file.save(os.path.join(app.config['MEMBERSHIP_FOLDER'], passport_filename))
-
-        application = MembershipApplication(
+        if passport_file and passport_file.filename != '':
+            passport_upload = cloudinary.uploader.upload(passport_file, folder="cooperative/passports")
+            passport_filename = passport_upload["secure_url"]
+            
+            application = MembershipApplication(
             user_id=current_user.id,
             phone_number=request.form.get('phone_number'),
             full_name=request.form.get('full_name'),
