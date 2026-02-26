@@ -313,7 +313,7 @@ def loans():
             duration_months=duration,
             due_date=due_date,
             address=address,
-            selfie=filename,
+            selfie=selfie_path,
             guarantor1_name=g1_name,
             guarantor1_phone=g1_phone,
             guarantor2_name=g2_name,
