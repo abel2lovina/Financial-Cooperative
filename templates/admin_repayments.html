@@ -23,7 +23,7 @@
                 <td>{{ r.loan_id }}</td>
                 <td>₦{{ r.amount_paid }}</td>
                 <td>
-                    <a href="{{ url_for('static', filename='uploads/evidence/' + r.evidence) }}" target="_blank">
+                    <a href="{{  r.evidence }}" target="_blank">
                         View
                     </a>
                 </td>

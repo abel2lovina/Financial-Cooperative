@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 import os
 import cloudinary
 import cloudinary.uploader
-import uuid
 from werkzeug.utils import secure_filename
 from itsdangerous import URLSafeTimedSerializer
 from flask import current_app
@@ -12,12 +11,8 @@ from flask import current_app
 from flask_mail import Mail, Message
 from sqlalchemy import func
 
-
-
-
 from flask import abort
 from functools import wraps
-
 
 from config import Config
 from models import db, User, LoanRepayment, Loan, Contribution, MembershipApplication, Feedback
@@ -27,8 +22,6 @@ cloudinary.config(
     api_secret=os.getenv("CLOUDINARY_API_SECRET"),
     secure=True
 )
-
-
 
 
 def admin_required(f):
@@ -338,7 +331,7 @@ def check_overdue_loans():
             loan.overdue = True
             # add 5% penalty on balance
             loan.balance += loan.balance * 0.05
-            db.session.commit()
+    db.session.commit()
 
 @app.route('/admin/loan_action/<int:loan_id>/<action>')
 @login_required

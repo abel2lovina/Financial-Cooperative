@@ -132,3 +132,6 @@ class Feedback(db.Model):
     date_submitted = db.Column(db.DateTime, default=datetime.utcnow)
 
     user = db.relationship('User', backref='feedbacks')
+
+
+

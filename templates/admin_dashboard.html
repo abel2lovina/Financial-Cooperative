@@ -72,7 +72,7 @@
       <td>₦{{ contrib.amount }}</td>
       <td>
         {% if contrib.evidence %}
-          <a href="{{ url_for('static', filename='uploads/evidence/' + contrib.evidence) }}" target="_blank">View</a>
+          <a href="{{ contrib.evidence }}" target="_blank">View</a>
         {% else %}
           No evidence
         {% endif %}
