@@ -9,6 +9,8 @@
         <th>Repayment</th>
         <th>Balance</th>
         <th>Status</th>
+        <th>Date Applied</th>
+        <th>Due Date</th>
     </tr>
     {% for loan in loans %}
     <tr>
@@ -16,7 +18,13 @@
         <td>₦{{ loan.amount }}</td>
         <td>₦{{ loan.repayment_amount }}</td>
         <td>₦{{ loan.balance }}</td>
-        <td>{{ loan.status }}</td>
+        <td>{%if loan.overdue%}
+            <p style="background-color: red;">Loan Overdue</p>
+            {%else%}
+            <p>Not Overdue</p>
+        </td>
+        <th>{{loan.date_requested}}</th>
+        <th>{{loan.due_date}}</th>
     </tr>
     {% endfor %}
 </table>

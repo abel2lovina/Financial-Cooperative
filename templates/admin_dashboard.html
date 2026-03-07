@@ -100,6 +100,7 @@
       <th>Guarantor 1</th>
       <th>Selfie/Picture</th>
       <th>Account Number</th>
+      <th>Application Status</th>
     </tr>
   </thead>
   <tbody>
@@ -125,8 +126,10 @@
         {% if loan.status == 'pending' %}
           <a href="{{ url_for('loan_action', loan_id=loan.id, action='approve') }}" class="btn btn-success btn-sm">Approve</a>
           <a href="{{ url_for('loan_action', loan_id=loan.id, action='reject') }}" class="btn btn-danger btn-sm">Reject</a>
-        {% else %}
-          —
+        {% elif loan.status == 'accepted' %}
+          <p style="color: green;">accepted</p>
+        {%else%}
+        <p style="color: red;">Rejected</p>
         {% endif %}
       </td>
     </tr>
