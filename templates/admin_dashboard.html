@@ -126,8 +126,8 @@
         {% if loan.status == 'pending' %}
           <a href="{{ url_for('loan_action', loan_id=loan.id, action='approve') }}" class="btn btn-success btn-sm">Approve</a>
           <a href="{{ url_for('loan_action', loan_id=loan.id, action='reject') }}" class="btn btn-danger btn-sm">Reject</a>
-        {% elif loan.status == 'accepted' %}
-          <p style="color: green;">accepted</p>
+        {% elif loan.status == 'approved' %}
+          <p style="color: green;">Approved</p>
         {%else%}
         <p style="color: red;">Rejected</p>
         {% endif %}
