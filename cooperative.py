@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, flash, session
+from flask import Flask, render_template, redirect, url_for, request, flash, session, send_from_directory
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from datetime import datetime, timedelta
 import os
@@ -83,6 +83,9 @@ def home():
         return redirect(url_for('member_dashboard'))
     return render_template('home.html')
 
+@app.route('/service-worker.js')
+def sw():
+    return send_from_directory('static', 'service-worker.js')
 
 @app.route('/admin/loans')
 @login_required
