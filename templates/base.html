@@ -27,7 +27,9 @@
                 aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-
+        <button id="installBtn" style="display:none; padding:10px; background:#0d6efd; color:white; border:none; border-radius:5px;">
+            Install App
+        </button>
         <div class="collapse navbar-collapse" id="navbarNav">
 
             <ul class="navbar-nav me-auto">
@@ -144,6 +146,30 @@ if ('serviceWorker' in navigator) {
         </a>
     </small>
 </footer>
+    <script>
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
+
+    // Listen for install availability
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault(); // stop automatic popup
+        deferredPrompt = e;
+        installBtn.style.display = 'block'; // show button
+    });
+
+    // When user clicks button
+    installBtn.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+
+        deferredPrompt.prompt(); // show install prompt
+
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log(`User response: ${outcome}`);
+
+        deferredPrompt = null;
+        installBtn.style.display = 'none';
+    });
+    </script>
 </body>
 
 </html>
